@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Rock Paper Scissors - Ultimate Game</title>
+    <meta name="description" content="Interactive Rock Paper Scissors game with persistent scores">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+        }
+        .slide-down { animation: slideDown 0.5s ease-out; }
+        .pulse-glow { animation: pulse-glow 2s infinite; }
+        .choice-btn-active { @apply ring-2 ring-blue-400 scale-105; }
+        .glass-effect { @apply bg-white/10 backdrop-blur-md border border-white/20; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-950 min-h-screen text-white font-sans">
+    <!-- Header -->
+    <header class="bg-white/5 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <img src="Noman pic .jpg" alt="Syed Noman" class="w-12 h-12 rounded-lg object-cover border-2 border-blue-400">
+                    <div>
+                        <h1 class="text-xl font-bold text-white">Syed Noman</h1>
+                        <p class="text-sm text-blue-300">• Rock Paper Scissors</p>
+                    </div>
+                </div>
+                <nav class="flex gap-6">
+                    <a href="#game" class="text-blue-300 hover:text-blue-200 transition font-medium">Play Game</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <section class="mb-12">
+            <div class="glass-effect rounded-2xl p-8 mb-8">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Rock • Paper • Scissors</h2>
+                <p class="text-lg text-blue-200 mb-6">Challenge the computer in this timeless game. Use keyboard shortcuts for quick play!</p>
+                <div class="glass-effect rounded-xl p-4 inline-block">
+                    <p class="text-sm font-mono text-blue-100">
+                        <span class="font-bold">Keyboard Shortcuts:</span> R or 1 = Rock • P or 2 = Paper • S or 3 = Scissors
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Section -->
+        <div class="grid md:grid-cols-3 gap-8" id="game">
+            <!-- Game Cards -->
+            <div class="md:col-span-2">
+                <div class="glass-effect rounded-2xl p-8 slide-down">
+                    <h3 class="text-2xl font-bold mb-8 text-blue-300">Make Your Choice</h3>
+                    
+                    <!-- Choice Buttons -->
+                    <div class="grid sm:grid-cols-3 gap-4 mb-8" role="group" aria-label="Choices">
+                        <button class="choice-button group relative overflow-hidden px-6 py-4 rounded-xl font-bold text-lg transition-all duration-300 bg-gradient-to-br from-blue-500 to-blue-600 hover:shadow-2xl hover:shadow-blue-500/50 hover:-translate-y-1 active:scale-95" data-choice="rock" aria-pressed="false">
+                            <span class="text-3xl block mb-2">🪨</span>
+                            <span>Rock</span>
+                        </button>
+                        <button class="choice-button group relative overflow-hidden px-6 py-4 rounded-xl font-bold text-lg transition-all duration-300 bg-gradient-to-br from-amber-500 to-amber-600 hover:shadow-2xl hover:shadow-amber-500/50 hover:-translate-y-1 active:scale-95" data-choice="paper" aria-pressed="false">
+                            <span class="text-3xl block mb-2">📄</span>
+                            <span>Paper</span>
+                        </button>
+                        <button class="choice-button group relative overflow-hidden px-6 py-4 rounded-xl font-bold text-lg transition-all duration-300 bg-gradient-to-br from-red-500 to-red-600 hover:shadow-2xl hover:shadow-red-500/50 hover:-translate-y-1 active:scale-95" data-choice="scissors" aria-pressed="false">
+                            <span class="text-3xl block mb-2">✂️</span>
+                            <span>Scissors</span>
+                        </button>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-6 mb-6">
+                        <div class="grid sm:grid-cols-2 gap-6 text-center">
+                            <div>
+                                <p class="text-blue-300 text-sm font-semibold mb-1">YOUR CHOICE</p>
+                                <p id="user-choice" class="text-3xl font-bold">—</p>
+                            </div>
+                            <div>
+                                <p class="text-blue-300 text-sm font-semibold mb-1">COMPUTER'S CHOICE</p>
+                                <p id="computer-choice" class="text-3xl font-bold">—</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Result Message -->
+                    <div role="region" aria-live="polite" aria-atomic="true" class="text-center">
+                        <p id="result" class="text-2xl font-bold text-blue-300 mb-2">Result: —</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Stats -->
+            <div class="space-y-6">
+                <!-- Scoreboard -->
+                <div class="glass-effect rounded-2xl p-6 slide-down" style="animation-delay: 0.1s;">
+                    <h4 class="text-xl font-bold mb-6 text-blue-300">Your Stats</h4>
+                    <div class="space-y-3">
+                        <div class="bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-lg p-4">
+                            <p class="text-sm text-green-300 font-semibold">Wins</p>
+                            <p id="wins" class="text-3xl font-bold text-green-400">0</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-red-500/20 to-red-600/20 border border-red-500/30 rounded-lg p-4">
+                            <p class="text-sm text-red-300 font-semibold">Losses</p>
+                            <p id="losses" class="text-3xl font-bold text-red-400">0</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border border-yellow-500/30 rounded-lg p-4">
+                            <p class="text-sm text-yellow-300 font-semibold">Ties</p>
+                            <p id="ties" class="text-3xl font-bold text-yellow-400">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button id="reset" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50 active:scale-95">
+                    🔄 Reset Stats
+                </button>
+
+                <!-- Info Card -->
+                <div class="glass-effect rounded-2xl p-6 slide-down" style="animation-delay: 0.2s;">
+                    <h5 class="font-bold text-blue-300 mb-3">💡 Tips</h5>
+                    <ul class="text-sm text-blue-200 space-y-2">
+                        <li>✓ Your scores auto-save</li>
+                        <li>✓ Use keyboard shortcuts</li>
+                        <li>✓ Play unlimited rounds</li>
+                        <li>✓ Beat the computer!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/5 border-t border-white/10 mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p class="text-blue-300">Built with ❤️ by Syed Noman • Learning & Fun Project</p>
+        </div>
+    </footer>
+
+    <script src="index.js" defer></script>
+</body>
+</html>
